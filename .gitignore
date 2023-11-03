@@ -167,3 +167,6 @@ kaggle.json
 
 # annoying DS Store files
 .DS_Store
+
+# scratchpad folder for testing things
+scratchpad/
