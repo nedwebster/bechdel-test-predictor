@@ -12,10 +12,7 @@ class MovieDbClient:
 
     def __init__(self):
         self.base_url = "https://api.themoviedb.org/3/"
-        self._headers = {
-            "accept": "application/json",
-            "Authorization": f"Bearer {os.environ['TMDB_API_TOKEN']}"
-        }
+        self._headers = {"accept": "application/json", "Authorization": f"Bearer {os.environ['TMDB_API_TOKEN']}"}
 
     def get(self, url: str, params: Optional[Dict[str, str]] = None):
         response = requests.get(url, headers=self._headers, params=params)
@@ -41,7 +38,6 @@ class MovieDbClient:
 
 
 if __name__ == "__main__":
-
     client = MovieDbClient()
     the_big_short = client.search_movie("The Big Short")
     credits = client.get_credits(the_big_short["id"])
