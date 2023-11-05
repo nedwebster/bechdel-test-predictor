@@ -1,8 +1,8 @@
 import logging
 import os
-import requests
 from typing import Any, Dict, Optional
 
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -12,10 +12,13 @@ class MovieDbClient:
 
     def __init__(self):
         self.base_url = "https://api.themoviedb.org/3/"
-        self._headers = {"accept": "application/json", "Authorization": f"Bearer {os.environ['TMDB_API_TOKEN']}"}
+        self._cache = {}
+
+    def get_headers(self) -> Dict[str, str]:
+        return {"accept": "application/json", "Authorization": f"Bearer {os.environ['TMDB_API_TOKEN']}"}
 
     def get(self, url: str, params: Optional[Dict[str, str]] = None):
-        response = requests.get(url, headers=self._headers, params=params)
+        response = requests.get(url, headers=self.get_headers(), params=params)
 
         return response.json()
 
@@ -32,12 +35,18 @@ class MovieDbClient:
             raise ValueError("No movie found!")
 
     def get_credits(self, movie_id: str) -> Dict[str, Any]:
-        url = self.base_url + f"movie/{movie_id}/credits"
-        credits = self.get(url)
+        if movie_id in self._cache.keys():
+            credits = self._cache[movie_id]["credits"]
+        else:
+            url = self.base_url + f"movie/{movie_id}/credits"
+            credits = self.get(url)
+            self._cache[movie_id] = {"credits": credits}
         return credits
 
+    def get_cast(self, movie_id: str) -> Dict[str, Any]:
+        credits = self.get_credits(movie_id)
+        return credits["cast"]
 
-if __name__ == "__main__":
-    client = MovieDbClient()
-    the_big_short = client.search_movie("The Big Short")
-    credits = client.get_credits(the_big_short["id"])
+    def get_crew(self, movie_id: str) -> Dict[str, Any]:
+        credits = self.get_credits(movie_id)
+        return credits["crew"]

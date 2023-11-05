@@ -170,3 +170,5 @@ kaggle.json
 
 # scratchpad folder for testing things
 scratchpad/
+
+.vscode
