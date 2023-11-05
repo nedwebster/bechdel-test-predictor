@@ -6,4 +6,30 @@ def test_get_movie():
     output = client.search_movie("The Big Short")
 
     assert output["id"] == 318846
-    assert output["original_title"] == "The Big Short"
+    assert output["title"] == "The Big Short"
+
+
+def test_get_cast_and_crew():
+    client = MovieDbClient()
+    id = 318846
+
+    cast = client.get_cast(movie_id=id)
+    assert len(cast) == 94
+
+    crew = client.get_crew(movie_id=id)
+    assert len(crew) == 202
+
+
+def test_caching(mocker):
+    dummy_credits = {"cast": ["a", "b"], "crew": ["c", "d"]}
+
+    client = MovieDbClient()
+    mocker.patch.object(client, "get", return_value=dummy_credits)
+
+    assert client._cache == {}
+
+    _ = client.get_cast(movie_id=12345)
+    assert client._cache == {12345: {"credits": dummy_credits}}
+
+    _ = client.get_crew(movie_id=12345)
+    assert client.get.call_count == 1
