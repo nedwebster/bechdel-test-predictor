@@ -22,7 +22,18 @@ class MovieDbClient:
 
         return response.json()
 
-    def search_movie(self, title: str) -> Dict[str, Any]:
+    def get_movie(self, title: str) -> Dict[str, Any]:
+        """Search for the movie ID from the title string, and then return the movie data corresponding to that ID.
+
+        Note: The data returned from the movie search request is limited, hence the request via ID is necessarry.
+
+        """
+        movie_id = self.search_movie(title=title)
+        url = self.base_url + f"movie/{movie_id}"
+        return self.get(url=url)
+
+    def search_movie(self, title: str) -> int:
+        """Search the MovieDB for a movie with a given title, and return it's ID if it exists."""
         url = self.base_url + "search/movie"
         params = {"query": title}
         search_results = self.get(url=url, params=params)
@@ -30,11 +41,12 @@ class MovieDbClient:
             movie = search_results["results"][0]
             if movie["original_title"].lower() != title.lower():
                 logger.warn(f"Requested movie: {title}, returned movie: {movie['original_title']}")
-            return movie
+            return movie["id"]
         else:
             raise ValueError("No movie found!")
 
-    def get_credits(self, movie_id: str) -> Dict[str, Any]:
+    def get_credits(self, movie_id: int) -> Dict[str, Any]:
+        """Get the credits for a given movie id."""
         if movie_id in self._cache.keys():
             credits = self._cache[movie_id]["credits"]
         else:
@@ -43,10 +55,12 @@ class MovieDbClient:
             self._cache[movie_id] = {"credits": credits}
         return credits
 
-    def get_cast(self, movie_id: str) -> Dict[str, Any]:
+    def get_cast(self, movie_id: int) -> Dict[str, Any]:
+        """Get the cast for a given movie id."""
         credits = self.get_credits(movie_id)
         return credits["cast"]
 
-    def get_crew(self, movie_id: str) -> Dict[str, Any]:
+    def get_crew(self, movie_id: int) -> Dict[str, Any]:
+        """Get the crew for a given movie id."""
         credits = self.get_credits(movie_id)
         return credits["crew"]
