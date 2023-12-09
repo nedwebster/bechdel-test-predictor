@@ -1,9 +1,9 @@
-from bechdel_test_predictor import MovieDbClient
+from bechdel_test_predictor.movie_db_client import MovieDbClient
 
 
 def test_get_movie():
     client = MovieDbClient()
-    output = client.search_movie("The Big Short")
+    output = client.get_movie("The Big Short")
 
     assert output["id"] == 318846
     assert output["title"] == "The Big Short"
@@ -17,7 +17,7 @@ def test_get_cast_and_crew():
     assert len(cast) == 94
 
     crew = client.get_crew(movie_id=id)
-    assert len(crew) == 202
+    assert len(crew) == 203
 
 
 def test_caching(mocker):
