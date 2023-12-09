@@ -8,3 +8,10 @@ Then run the following command to download the data:
 ```sh
 make download-data
 ```
+
+
+## Tests
+`bechdel-test-predictor` uses pytest to run the unit tests. To run the unit tests, use the following command:
+```sh
+make unit-test
+```

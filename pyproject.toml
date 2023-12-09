@@ -3,11 +3,44 @@ name = "bechdel-test-predictor"
 version = "0.1.0"
 description = ""
 authors = ["Ned Webster <ned.webster@simplybusiness.co.uk>"]
+include = ["src/bechdel_test_predictor/**/*"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9,<3.13"
 opendatasets = "^0.1.22"
+pandas = "^2.1.2"
+types-requests = "^2.31.0.10"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+pytest = "^7.4.3"
+flake8 = "^6.1.0"
+black = "^23.10.1"
+isort = "^5.12.0"
+pyproject-flake8 = "^6.1.0"
+pytest-mock = "^3.12.0"
+
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+skip_glob = "*/.*/*,.*"
+default_section = "THIRDPARTY"
+known_first_party = "databricks_template"
+line_length = 120
+force_grid_wrap = false
+use_parentheses = true
+include_trailing_comma = true
+combine_as_imports = true
+multi_line_output = 3
+
+[tool.flake8]
+max-line-length = 120
+per-file-ignores = []
+exclude = [".venv", "dist"]
 
 
 [build-system]
