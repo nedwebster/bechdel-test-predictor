@@ -5,6 +5,7 @@ on:
 
 env:
     POETRY_VERSION: 1.6.1
+    TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
 
 jobs:
   basic-checks:
