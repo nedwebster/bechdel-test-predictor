@@ -4,6 +4,8 @@ import json
 from dataclasses import asdict, dataclass, field, fields
 from typing import Any, Dict, List, Union
 
+import pandas as pd
+
 from bechdel_test_predictor.cast import Cast
 from bechdel_test_predictor.crew import Crew
 from bechdel_test_predictor.movie_db_client import MovieDbClient
@@ -45,10 +47,11 @@ class Movie:
 
 
 class MovieClient:
-    """Class to interact with Movie objects, via the MovieDBClient."""
+    """Class to interact with Movie objects, via the MovieDBClient and MovieProcessor."""
 
     def __init__(self):
         self.movie_db_client = MovieDbClient()
+        self.movie_processor = MovieProcessor()
 
     def get_movie(self, title: str) -> Movie:
         movie_data = self.movie_db_client.get_movie(title)
@@ -60,6 +63,11 @@ class MovieClient:
         movie.add_cast(cast)
 
         return movie
+
+    def get_processed_movie(self, title: str) -> pd.DataFrame:
+        movie = self.get_movie(title)
+        movie_data = self.movie_processor.process_movie(movie)
+        return movie_data
 
     def _get_crew(self, movie_id: int) -> List[Crew]:
         crew_data = self.movie_db_client.get_crew(movie_id=movie_id)
@@ -146,7 +154,7 @@ class MovieProcessor:
         movie_data[new_name] = movie_data[old_name]
         return movie_data
 
-    def process_movie(self, movie: Movie) -> Dict[str, Any]:
+    def process_movie(self, movie: Movie) -> pd.DataFrame:
         movie_data = movie.dict()
 
         movie_data = self._format_genres(movie_data)
@@ -165,4 +173,4 @@ class MovieProcessor:
             else:
                 output_dict[col] = movie_data[col]
 
-        return output_dict
+        return pd.DataFrame(output_dict, index=[0])
