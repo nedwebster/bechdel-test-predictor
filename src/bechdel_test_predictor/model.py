@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-class DummyModel:
+class Model:
     """
     Dummy model class, used to build out infrastucture. This should be replaced by the real
     model when it is developed.
