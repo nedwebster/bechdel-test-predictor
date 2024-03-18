@@ -10,6 +10,10 @@ make download-data
 ```
 
 
+## Environment Variables
+In order to access TheMovieDB api, the `TMDB_API_TOKEN` env var needs to be set. To generate your own token, you can follow the steps in this guide: https://www.educative.io/courses/movie-database-api-python/set-up-the-credentials. The `TMDB_API_TOKEN` is the `API Read Access Token` assigned to your TheMovieDB account.
+
+
 ## Tests
 `bechdel-test-predictor` uses pytest to run the unit tests. To run the unit tests, use the following command:
 ```sh
