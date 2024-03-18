@@ -1,13 +1,13 @@
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
 
-from bechdel_test_predictor import BechdelTestClient
+from bechdel_test_predictor import BechdelAPI
 
 
 load_dotenv()
 app = Flask(__name__)
 
-client = BechdelTestClient()
+client = BechdelAPI()
 
 
 @app.route("/", methods=["GET", "POST"])
