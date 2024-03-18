@@ -51,7 +51,6 @@ class MovieClient:
 
     def __init__(self):
         self.movie_db_client = MovieDbClient()
-        self.movie_processor = MovieProcessor()
 
     def get_movie(self, title: str) -> Movie:
         movie_data = self.movie_db_client.get_movie(title)
@@ -63,11 +62,6 @@ class MovieClient:
         movie.add_cast(cast)
 
         return movie
-
-    def get_processed_movie(self, title: str) -> pd.DataFrame:
-        movie = self.get_movie(title)
-        movie_data = self.movie_processor.process_movie(movie)
-        return movie_data
 
     def _get_crew(self, movie_id: int) -> List[Crew]:
         crew_data = self.movie_db_client.get_crew(movie_id=movie_id)

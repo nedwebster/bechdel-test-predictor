@@ -9,6 +9,12 @@ Then run the following command to download the data:
 make download-data
 ```
 
+## Local Flask App
+There is a temporary local flask app (currently in development) which can be run with the following command from inside the `/flask_app` directory
+```sh
+flask run
+```
+
 
 ## Environment Variables
 In order to access TheMovieDB api, the `TMDB_API_TOKEN` env var needs to be set. To generate your own token, you can follow the steps in this guide: https://www.educative.io/courses/movie-database-api-python/set-up-the-credentials. The `TMDB_API_TOKEN` is the `API Read Access Token` assigned to your TheMovieDB account.

@@ -7,10 +7,12 @@ include = ["src/bechdel_test_predictor/**/*"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.9,<3.9.7 || >3.9.7,<3.13"
 opendatasets = "^0.1.22"
 pandas = "^2.1.2"
 types-requests = "^2.31.0.10"
+flask = "^3.0.0"
+python-dotenv = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
