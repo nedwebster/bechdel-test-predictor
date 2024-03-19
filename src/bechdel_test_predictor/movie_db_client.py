@@ -4,6 +4,8 @@ from typing import Any, Dict, Optional
 
 import requests
 
+from bechdel_test_predictor.error import MovieNotFoundError
+
 logger = logging.getLogger(__name__)
 
 
@@ -43,7 +45,9 @@ class MovieDbClient:
                 logger.warn(f"Requested movie: {title}, returned movie: {movie['original_title']}")
             return movie["id"]
         else:
-            raise ValueError("No movie found!")
+            error = MovieNotFoundError(title)
+            logger.error(repr(error))
+            raise error
 
     def get_credits(self, movie_id: int) -> Dict[str, Any]:
         """Get the credits for a given movie id."""
