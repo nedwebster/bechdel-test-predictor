@@ -37,7 +37,8 @@ class Movie:
         return cls(**{k: v for k, v in dict_.items() if k in class_fields})
 
     def dict(self) -> Dict[str, Any]:
-        return {k: v for k, v in asdict(self).items()}
+        # Use asdict for recursive conversion of nested dataclasses
+        return asdict(self)
 
     def add_crew(self, crew: List[Crew]) -> None:
         self.crew = crew
