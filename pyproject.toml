@@ -23,6 +23,7 @@ black = "^23.10.1"
 isort = "^5.12.0"
 pyproject-flake8 = "^6.1.0"
 pytest-mock = "^3.12.0"
+pytest-dotenv = "^0.5.2"
 
 
 [tool.black]
