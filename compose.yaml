@@ -1,0 +1,40 @@
+services:
+  
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+
+  mlflow-server:
+    build: ./services/mlflow_server
+    image: mlflow_server
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres-db
+
+  train-model-task:
+    build: ./services/train_model_task
+    image: train_model
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: "train_model.py"
+    depends_on:
+      - mlflow-server
+
+  bechdel-flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mlflow-server
+      - train-model-task
+
+volumes:
+  postgres_db:
+    driver: local
