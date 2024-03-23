@@ -1,14 +1,21 @@
+import mlflow
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, render_template, request
 
 from bechdel_test_predictor import BechdelAPI
 from bechdel_test_predictor.error import MovieNotFoundError
 
+from mlflow_utils import load_latest_model
+from settings import MLFLOW_MODEL_NAME, MLFLOW_TRACKING_URI
+
 
 load_dotenv(find_dotenv())
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+
 app = Flask(__name__)
 
-client = BechdelAPI()
+model = load_latest_model(model_name=MLFLOW_MODEL_NAME)
+client = BechdelAPI(model=model)
 
 
 @app.route("/", methods=["GET", "POST"])

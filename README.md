@@ -9,11 +9,13 @@ Then run the following command to download the data:
 make download-data
 ```
 
-## Local Flask App
-There is a temporary local flask app (currently in development) which can be run with the following command from inside the `/flask_app` directory
+## Local Deployment
+The flask app (and it's supporting services) can be deployed locally with `docker-compose` (see `docs/system_architecture.md` for more detail):
 ```sh
-flask run
+docker compose up --build
 ```
+
+You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`.
 
 
 ## Environment Variables

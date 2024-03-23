@@ -1,17 +1,17 @@
 from typing import Dict
 
 import pandas as pd
+from mlflow.pyfunc import PyFuncModel
 
-from bechdel_test_predictor.model import Model
 from bechdel_test_predictor.movie import Movie, MovieClient, MovieProcessor
 from bechdel_test_predictor.prediction import Prediction
 
 
 class BechdelAPI:
-    def __init__(self):
+    def __init__(self, model: PyFuncModel):
         self.client = MovieClient()
         self.processor = MovieProcessor()
-        self.model = Model()
+        self.model = model
 
     def get_movie(self, title: str) -> Movie:
         return self.client.get_movie(title)
