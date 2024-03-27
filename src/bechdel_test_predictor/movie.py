@@ -46,6 +46,9 @@ class Movie:
     def add_cast(self, cast: List[Cast]) -> None:
         self.cast = cast
 
+    def summary(self):
+        return f"Movie(id='{self.id}', title='{self.title}')"
+
 
 class MovieClient:
     """Class to interact with Movie objects, via the MovieDBClient and MovieProcessor."""
