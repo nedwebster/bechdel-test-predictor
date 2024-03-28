@@ -1,5 +1,5 @@
 services:
-  
+
   postgres-db:
     image: postgres:latest
     environment:
@@ -19,7 +19,9 @@ services:
       - postgres-db
 
   train-model-task:
-    build: ./services/train_model_task
+    build: 
+      context: .
+      dockerfile: ./services/train_model_task/Dockerfile
     image: train_model
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -28,7 +30,9 @@ services:
       - mlflow-server
 
   bechdel-flask-app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./services/flask_app/Dockerfile
     ports:
       - "5000:5000"
     depends_on:
