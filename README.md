@@ -10,9 +10,17 @@ make download-data
 ```
 
 ## Local Deployment
-The model can be deployed via a flask app (and it's supporting services) with the `docker-compose` command (see `docs/system_architecture.md` for more detail):
+The model can be deployed via a flask app (and it's supporting services) with two different commands:
+### With Model Training
+For the first local run, you'll need to also run the model training task:
 ```sh
-docker compose up --build
+make deploy-with-train
+```
+
+### Without Model Training
+If a model has already been trained, and exists in the mlflow server, you can deploy without re-training:
+```sh
+make deploy
 ```
 
 You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`. To run successfully, you need the `kaggle.json` file in the root directory, as specified in the section above. You also need a `.env` file in the root directory, containing the environment variables listed in the section below.

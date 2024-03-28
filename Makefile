@@ -10,3 +10,9 @@ lint:
 	pflake8 $(SOURCES_FOLDER)
 	black --check $(SOURCES_FOLDER)
 	isort --check-only $(SOURCES_FOLDER)
+
+deploy:
+	docker compose up --build
+
+deploy-with-train:
+	TRAIN_MODEL=1 docker compose up --build

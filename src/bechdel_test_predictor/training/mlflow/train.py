@@ -41,7 +41,7 @@ def preprocess_data(df) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Split intro train and test
     train, test = train_test_split(df, test_size=0.3, random_state=RANDOM_SEED)
     mlflow.log_param("data_shape_train", train.shape)
-    mlflow.log_param("data_shape_test", train.shape)
+    mlflow.log_param("data_shape_test", test.shape)
 
     return train, test
 

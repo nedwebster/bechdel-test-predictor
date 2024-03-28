@@ -23,6 +23,8 @@ services:
       context: .
       dockerfile: ./services/train_model_task/Dockerfile
     image: train_model
+    environment:
+      TRAIN_MODEL: $TRAIN_MODEL
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     command: "train_model.py"
