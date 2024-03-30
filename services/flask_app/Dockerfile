@@ -21,4 +21,6 @@ COPY .env /app/
 # copy every content from the local file to the image
 COPY ./services/flask_app /app
 
+ENV ENV=DOCKER
+
 CMD ["flask", "run", "-h", "0.0.0.0", "-p", "5000"]

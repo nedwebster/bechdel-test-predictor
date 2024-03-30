@@ -1,8 +1,8 @@
 # bechdel-test-predictor
-
+This repo contains an ML model for predicting whether a film will pass or fail the [Bechdel test](https://en.wikipedia.org/wiki/Bechdel_test). The `src/bechdel_test_predictor/` directory contains code to train the ML model, as well as code to serve the model. The `services/` directory contains the multiple services used to deploy the model, including an Mlflow server, a PSQL database, and a Flask app. The `analysis/` folder contains the notebooks for the model development.
 
 ## Downloading Data
-The repo uses [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master) to download the data. The package requires a `kaggle.json` file within the root directory of this project. Follow steps in the opendatasets `README.md` to generate your own `kaggle.json` if needed.
+The repo uses [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master) to download the training data. The package requires a `kaggle.json` file within the root directory of this project. Follow steps in the opendatasets `README.md` to generate your own `kaggle.json` if needed.
 
 Then run the following command to download the data:
 ```sh
@@ -10,12 +10,20 @@ make download-data
 ```
 
 ## Local Deployment
-The flask app (and it's supporting services) can be deployed locally with `docker-compose` (see `docs/system_architecture.md` for more detail):
+The model can be deployed via a flask app (and it's supporting services) with two different commands:
+### With Model Training
+For the first local run, you'll need to also run the model training task:
 ```sh
-docker compose up --build
+make deploy-with-train
 ```
 
-You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`.
+### Without Model Training
+If a model has already been trained, and exists in the mlflow server, you can deploy without re-training:
+```sh
+make deploy
+```
+
+You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`. To run successfully, you need the `kaggle.json` file in the root directory, as specified in the section above. You also need a `.env` file in the root directory, containing the environment variables listed in the section below.
 
 
 ## Environment Variables

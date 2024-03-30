@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 
 PREDICTION_MAP = {
-    0: ("fail", "completely fail the test."),
-    1: ("partial fail", "have at least two women in it."),
-    2: ("partial fail", "have at least two women who talk to each other."),
-    3: ("pass", "have at least two women who talk to each other about something besides a man!"),
+    0: ("fail", "fail the test."),
+    1: ("pass", "pass the test, having at least two women who talk to each other!"),
 }
 
 PRE_SUMMARY = "We predict the movie will "
