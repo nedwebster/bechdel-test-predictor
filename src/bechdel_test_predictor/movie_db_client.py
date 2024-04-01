@@ -1,12 +1,10 @@
-import logging
 import os
 from typing import Any, Dict, Optional
 
 import requests
 
 from bechdel_test_predictor.error import MovieNotFoundError
-
-logger = logging.getLogger(__name__)
+from bechdel_test_predictor.logging.utils import db_logger
 
 
 class MovieDbClient:
@@ -42,11 +40,11 @@ class MovieDbClient:
         if search_results["total_results"] > 0:
             movie = search_results["results"][0]
             if movie["original_title"].lower() != title.lower():
-                logger.warn(f"Requested movie: {title}, returned movie: {movie['original_title']}")
+                db_logger.warn(f"Requested movie: {title}, returned movie: {movie['original_title']}")
             return movie["id"]
         else:
             error = MovieNotFoundError(title)
-            logger.error(repr(error))
+            db_logger.error(repr(error))
             raise error
 
     def get_credits(self, movie_id: int) -> Dict[str, Any]:

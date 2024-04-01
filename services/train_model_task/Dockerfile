@@ -16,7 +16,7 @@ RUN poetry config virtualenvs.create false --local
 RUN poetry install
 
 # copy environment variables and config to the image
-COPY kaggle.json /app/
+COPY kaggle.json .env /app/
 
 COPY services/train_model_task/train_model.py /app/
 

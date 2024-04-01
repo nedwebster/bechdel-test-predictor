@@ -3,6 +3,7 @@ import mlflow
 from mlflow.pyfunc import PyFuncModel, PythonModel
 
 from bechdel_test_predictor.training.mlflow.settings import MLFLOW_TRACKING_URI
+from bechdel_test_predictor.logging.utils import db_logger
 
 
 class BechdelTestPredictor(PythonModel):
@@ -12,7 +13,9 @@ class BechdelTestPredictor(PythonModel):
         self.model = model
 
     def predict(self, context, model_input):
-        return self.model.predict(model_input)[0]
+        prediction = self.model.predict(model_input)[0]
+        db_logger.info(f"Prediction: {prediction}")
+        return prediction
 
 
 def log_model(model):

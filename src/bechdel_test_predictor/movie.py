@@ -9,6 +9,7 @@ import pandas as pd
 from bechdel_test_predictor.cast import Cast
 from bechdel_test_predictor.crew import Crew
 from bechdel_test_predictor.movie_db_client import MovieDbClient
+from bechdel_test_predictor.logging.utils import db_logger
 
 
 @dataclass
@@ -64,6 +65,8 @@ class MovieClient:
         cast = self._get_cast(movie.id)
         movie.add_crew(crew)
         movie.add_cast(cast)
+
+        db_logger.info(f"Movie: {movie.summary()}")
 
         return movie
 

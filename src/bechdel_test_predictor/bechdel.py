@@ -5,6 +5,7 @@ from mlflow.pyfunc import PyFuncModel
 
 from bechdel_test_predictor.movie import Movie, MovieClient, MovieProcessor
 from bechdel_test_predictor.prediction import Prediction
+from bechdel_test_predictor.logging.utils import db_logger
 
 
 class BechdelAPI:
@@ -30,4 +31,6 @@ class BechdelAPI:
         movie = self.get_movie(title)
         processed_movie = self.process_movie(movie)
         prediction = self.get_prediction(processed_movie)
-        return self.format_prediction(title=movie.title, prediction=prediction)
+        formatted_prediction = self.format_prediction(title=movie.title, prediction=prediction)
+        db_logger.info(f"Formatted Prediction: {formatted_prediction}")
+        return formatted_prediction
