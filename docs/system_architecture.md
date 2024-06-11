@@ -37,3 +37,14 @@ flowchart LR
     D --> B
     C -->|Yes| E[Deploy app]
 ```
+
+
+## Inference Process Flow
+![Inferece Process Flow](diagrams/inference_diagram.png)
+
+1. The user inputs a film via the flask app
+2. The MovieClient makes a request to the TMDB API to retrieve the movie data
+3. The MovieProcessor converts the raw movie data into model features
+4. The Model generates a prediction of the movies probability to pass the Bechdel test
+5. The Prediction formats the raw probability to a human readable output
+6. The formated prediction is displayed to the user in the flask app
