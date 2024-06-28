@@ -1,3 +1,5 @@
+import logging
+import os
 from typing import Dict
 
 import pandas as pd
@@ -5,6 +7,13 @@ from mlflow.pyfunc import PyFuncModel
 
 from bechdel_test_predictor.movie import Movie, MovieClient, MovieProcessor
 from bechdel_test_predictor.prediction import Prediction
+
+if os.environ.get("ENV", "local") == "docker":
+    from bechdel_test_predictor.logging.utils import get_logger
+
+    db_logger = get_logger()
+else:
+    db_logger = logging.getLogger()
 
 
 class BechdelAPI:
@@ -30,4 +39,12 @@ class BechdelAPI:
         movie = self.get_movie(title)
         processed_movie = self.process_movie(movie)
         prediction = self.get_prediction(processed_movie)
+
+        log_output = {
+            "input_title": title,
+            "returned_title": movie.title,
+            "prediction": prediction,
+        }
+        db_logger.info(log_output)
+
         return self.format_prediction(title=movie.title, prediction=prediction)

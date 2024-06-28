@@ -17,7 +17,7 @@ def test_get_cast_and_crew():
     assert len(cast) == 94
 
     crew = client.get_crew(movie_id=id)
-    assert len(crew) == 204
+    assert len(crew) == 205
 
 
 def test_caching(mocker):

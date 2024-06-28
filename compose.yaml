@@ -18,16 +18,16 @@ services:
     depends_on:
       - postgres-db
 
-  train-model-task:
+  python-tasks:
     build: 
       context: .
-      dockerfile: ./services/train_model_task/Dockerfile
-    image: train_model
-    environment:
-      TRAIN_MODEL: $TRAIN_MODEL
+      dockerfile: ./services/python_tasks/Dockerfile
+    image: python_tasks
     stdin_open: true # docker run -i
     tty: true        # docker run -t
-    command: "train_model.py"
+    command: "init_data.py"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
     depends_on:
       - mlflow-server
 
@@ -39,7 +39,7 @@ services:
       - "5000:5000"
     depends_on:
       - mlflow-server
-      - train-model-task
+      - python-tasks
 
 volumes:
   postgres_db:

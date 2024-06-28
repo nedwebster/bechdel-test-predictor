@@ -19,6 +19,8 @@ scikit-learn = "^1.4.1.post1"
 mlflow = "^2.11.3"
 pip-system-certs = "^4.0"
 backoff = "^2.2.1"
+sqlalchemy = "^2.0.31"
+psycopg2 = "^2.9.9"
 
 
 [tool.poetry.group.dev.dependencies]
