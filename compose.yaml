@@ -26,6 +26,8 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     command: "init_data.py"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
     depends_on:
       - mlflow-server
 

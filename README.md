@@ -24,6 +24,8 @@ This will do four things:
 3. Deploy the Mlflow instance in a docker container, using the PSQL database as it's artifact storage.
 4. Deploy the flask app. If no model exists in Mlflow, the app will not deploy and will endlessly retry to find a model. As soon as a model is trained, the app will deploy fully and the url will be available.
 
+For more details, check out the [system_architecture](https://github.com/nedwebster/bechdel-test-predictor/blob/main/docs/system_architecture.md) docs.
+
 ### Train Model
 To train a new version of the model, run the following command
 ```sh

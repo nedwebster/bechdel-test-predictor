@@ -5,7 +5,7 @@
 
 Above is a diagram of the deployment architecture. The deployment consists of 3 key services, each deployed to their own container within the Docker network.
 1. The Mlflow server, which is responsible for housing the trained models so that they are accessible by the wider app.
-2. The PSQL deployment, which provides SQL storage for the training data as well as artifact storage for Mlflow. An external database for storage is a requirement for Mlflow.
+2. The PSQL deployment, which provides a SQL database for storing the training data and the models prediction logs. It also provides artifact storage for Mlflow. An external database for storage is a requirement for Mlflow.
 3. The Flask app, which is the primary service the user will interact with. It contains the `bechdel-test-predictor` code as a backend, and a basic html web page for the frontend interface.
 
 
