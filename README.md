@@ -1,7 +1,9 @@
-# bechdel-test-predictor
-This repo contains an ML model for predicting whether a film will pass or fail the [Bechdel test](https://en.wikipedia.org/wiki/Bechdel_test). The `src/bechdel_test_predictor/` directory contains code to train the ML model, as well as code to serve the model. The `services/` directory contains the multiple services used to deploy the model, including an Mlflow server, a PSQL database, and a Flask app. The `analysis/` folder contains the notebooks for the model development.
+![Bechdel Test](docs/diagrams/bechdel_test.png)
 
-## Downloading Data
+# bechdel-test-predictor
+This repo contains an ML model for predicting whether a film will pass or fail the [Bechdel test](https://en.wikipedia.org/wiki/Bechdel_test). The `src/bechdel_test_predictor/` directory contains code to train the ML model, as well as code to serve the model. The `services/` directory contains the multiple services used to deploy and orchestrate the inference service, including an Mlflow server, a PSQL database, and a Flask frontend. The `analysis/` folder contains the notebooks for the model development.
+
+## Downloading Data for Analysis
 The repo uses [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master) to download the training data. The package requires a `kaggle.json` file within the root directory of this project. Follow steps in the opendatasets `README.md` to generate your own `kaggle.json` if needed.
 
 Then run the following command to download the data:
@@ -10,18 +12,24 @@ make download-data
 ```
 
 ## Local Deployment
-The model can be deployed via a flask app (and it's supporting services) with two different commands:
-### With Model Training
-For the first local run, you'll need to also run the model training task:
+The model can be deployed via a flask app (and it's supporting services) through docker and docker-compose:
+### Setup Infrastructure
+To deploy the required infrastructure for the inference service, run the following command
 ```sh
-make deploy-with-train
+make init-infra
 ```
+This will do four things:
+1. Deploy the PSQL database in a docker container
+2. Download the training data from [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master), and ingests it into the PSQL database as the `movies` table. This is to simulate the standard use-case scenario of having data stored in SQL at model training time.
+3. Deploy the Mlflow instance in a docker container, using the PSQL database as it's artifact storage.
+4. Deploy the flask app. If no model exists in Mlflow, the app will not deploy and will endlessly retry to find a model. As soon as a model is trained, the app will deploy fully and the url will be available.
 
-### Without Model Training
-If a model has already been trained, and exists in the mlflow server, you can deploy without re-training:
+### Train Model
+To train a new version of the model, run the following command
 ```sh
-make deploy
+make train-model
 ```
+This will run the model training pipeline as a standalone task in it's own docker container. The model will be registered to the Mlflow model registry.
 
 You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`. To run successfully, you need the `kaggle.json` file in the root directory, as specified in the section above. You also need a `.env` file in the root directory, containing the environment variables listed in the section below.
 

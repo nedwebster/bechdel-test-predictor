@@ -1,36 +1,51 @@
+import logging
+from typing import Any
+
 import backoff
 import mlflow
 from mlflow.pyfunc import PyFuncModel, PythonModel
 
-from bechdel_test_predictor.training.mlflow.settings import MLFLOW_TRACKING_URI
+from bechdel_test_predictor.mlflow.settings import MLFLOW_TRACKING_URI
+from bechdel_test_predictor.model.model import Model
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-class BechdelTestPredictor(PythonModel):
+class MlflowModel(PythonModel):
+    """Model wrapper for a Mlflow compatible model."""
+
     name: str = "bechdel-test-predictor"
 
-    def __init__(self, model):
+    def __init__(self, model: Model):
         self.model = model
 
     def predict(self, context, model_input):
         return self.model.predict(model_input)[0]
 
 
-def log_model(model):
-    model = BechdelTestPredictor(model)
+def log_model(model: Model):
+    """Log MlflowModel to mlflow model registry."""
+    mlflow_model = MlflowModel(model)
     mlflow.pyfunc.log_model(
         artifact_path="model",
-        python_model=model,
+        python_model=mlflow_model,
         registered_model_name=model.name,
     )
+
+
+def backoff_message(x: Any) -> None:
+    logger.info("No model found, retrying in 10 seconds...")
 
 
 @backoff.on_exception(
     backoff.constant,
     exception=mlflow.exceptions.RestException,
-    max_time=100,  # Run for at most ... seconds
     interval=10,  # Poll every ... seconds
+    on_backoff=backoff_message,
 )
 def load_latest_model(model_name: str) -> PyFuncModel:
+    """Load the latest model from the model registry, based on model version."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
     client = mlflow.client.MlflowClient()
 

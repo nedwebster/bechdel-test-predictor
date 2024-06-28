@@ -1,0 +1,37 @@
+<mxfile host="65bd71144e">
+    <diagram id="zO2f4YAmhJXQYq2VpmIL" name="Page-1">
+        <mxGraphModel dx="529" dy="668" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="12" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="130" width="370" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="shape=mxgraph.signs.people.woman_1;html=1;pointerEvents=1;fillColor=#000000;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="260" width="48" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="" style="shape=mxgraph.signs.people.woman_1;html=1;pointerEvents=1;fillColor=#000000;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="260" width="48" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.oval_callout;flipV=0;flipH=1;" vertex="1" parent="1">
+                    <mxGeometry x="70" y="210" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.oval_callout;flipV=0;flipH=0;" vertex="1" parent="1">
+                    <mxGeometry x="220" y="210" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="shape=mxgraph.signs.people.man_1;html=1;pointerEvents=1;fillColor=#000000;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="340" y="260" width="37" height="98" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="shape=cross;whiteSpace=wrap;html=1;rotation=-45;size=0.058925565098877544;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="318.5" y="260" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 30px;&quot;&gt;BECHDEL TEST&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="67.5" y="150" width="335" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.devices.video_camera;fontFamily=Verdana;fontSize=30;flipH=1;rotation=-15;" vertex="1" parent="1">
+                    <mxGeometry x="307" y="210" width="70" height="35" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

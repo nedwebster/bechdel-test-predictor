@@ -2,11 +2,11 @@ from flask import Flask, render_template, request
 
 from bechdel_test_predictor import BechdelAPI
 from bechdel_test_predictor.error import MovieNotFoundError
-from bechdel_test_predictor.training.mlflow import BechdelTestPredictor, load_latest_model
+from bechdel_test_predictor.mlflow import MlflowModel, load_latest_model
 
 
 app = Flask(__name__)
-model = load_latest_model(model_name=BechdelTestPredictor.name)
+model = load_latest_model(model_name=MlflowModel.name)
 client = BechdelAPI(model=model)
 
 
