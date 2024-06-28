@@ -39,7 +39,7 @@ You can access the deployed app by going to `http://localhost:5000`, and you can
 ## Environment Variables
 - `TMDB_API_TOKEN`: In order to access TheMovieDB api, the `TMDB_API_TOKEN` env var needs to be set. To generate your own token, you can follow the steps in this guide: https://www.educative.io/courses/movie-database-api-python/set-up-the-credentials. The `TMDB_API_TOKEN` is the `API Read Access Token` assigned to your TheMovieDB account.
 - `DB_CONNECTION_STRING`: In order for the python tasks to acces the PSQL database, the `DB_CONNECTION_STRING` needs to be set. When running this app locally, the value should be set to `postgresql://postgres:postgres123@postgres-db:5432/postgres`
-
+- `USERNAME`: Metaflow requires a username to be set in order to run its workflows. This can be set to anything you want.
 
 ## Tests
 `bechdel-test-predictor` uses pytest to run the unit tests. To run the unit tests, use the following command:

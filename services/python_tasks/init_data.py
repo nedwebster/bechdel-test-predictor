@@ -1,27 +1,44 @@
-import tempfile
-from pathlib import Path
+import logging
 
-import opendatasets as od
-import pandas as pd
-from sqlalchemy import create_engine
-
-from bechdel_test_predictor.model.settings import DATA_URL
+from metaflow.decorators import step
+from metaflow.flowspec import FlowSpec
 
 
-def download_data() -> pd.DataFrame:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        od.download(dataset_id_or_url=DATA_URL, data_dir=temp_dir)
-        data_path = Path(temp_dir) / "female-representation-in-cinema" / "movies.csv"
-        df = pd.read_csv(data_path, index_col=0)
-        return df
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-def upload_to_psql(data: pd.DataFrame) -> None:
-    engine = create_engine("postgresql://postgres:postgres123@postgres-db:5432/postgres")  # TODO: remove hardcoded values
-    with engine.connect() as connection:
-        data.to_sql("movies", connection, if_exists="replace", index=False)
+class InitData(FlowSpec):
+    @step
+    def start(self):
+        logger.info("Starting init data flow")
+        self.next(self.download_data)
+
+    @step
+    def download_data(self):
+        logger.info("Downloading data")
+        from bechdel_test_predictor.model.data import download_csv_data
+        from bechdel_test_predictor.model.settings import DATA_URL
+
+        self.data = download_csv_data(DATA_URL)
+        self.next(self.ingest_data)
+
+    @step
+    def ingest_data(self):
+        logger.info("Ingesting data to PSQL")
+        import os
+
+        from sqlalchemy import create_engine
+
+        engine = create_engine(os.environ["DB_CONNECTION_STRING"])
+        with engine.connect() as connection:
+            self.data.to_sql("movies", connection, if_exists="replace", index=False)
+        self.next(self.end)
+
+    @step
+    def end(self):
+        logger.info("Data initialisation completed")
 
 
 if __name__ == "__main__":
-    data = download_data()
-    upload_to_psql(data)
+    InitData()
