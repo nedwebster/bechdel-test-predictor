@@ -15,4 +15,4 @@ init-infra:
 	docker compose up --build
 
 train-model:
-	docker compose run --no-deps --entrypoint "python train_model.py" python-tasks
+	docker compose run --no-deps --entrypoint "python train_model.py run" python-tasks

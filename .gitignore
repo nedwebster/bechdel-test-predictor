@@ -172,3 +172,6 @@ kaggle.json
 scratchpad/
 
 .vscode
+
+mlruns
+.metaflow

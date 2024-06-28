@@ -3,7 +3,6 @@ import tempfile
 from pathlib import Path
 from typing import Tuple
 
-import mlflow
 import numpy as np
 import opendatasets as od
 import pandas as pd
@@ -18,7 +17,6 @@ def download_csv_data(data_url) -> pd.DataFrame:
         od.download(dataset_id_or_url=data_url, data_dir=temp_dir)
         data_path = Path(temp_dir) / "female-representation-in-cinema" / "movies.csv"
         df = pd.read_csv(data_path, index_col=0)
-        mlflow.log_param("data_shape_raw", df.shape)
 
         return df
 
