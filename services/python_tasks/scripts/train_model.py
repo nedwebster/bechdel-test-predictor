@@ -56,23 +56,28 @@ class TrainingFlow(FlowSpec):
     @step
     def log_to_mlflow(self):
         import mlflow
-
         from bechdel_test_predictor.mlflow import log_model
+        from bechdel_test_predictor.mlflow.settings import MLFLOW_TRACKING_URI
 
-        log_model(self.model)
-        mlflow.log_metrics({
-            "Threshold": self.model.threshold,
-            "AUC": self.auc,
-            "Average Precision": self.average_precision,
-            "Precision": self.precision,
-            "Recall": self.recall,
-        })
-        mlflow.log_params({
-            "features": self.model.features,
-            "target": self.model.target,
-            "train_data_shape": self.train.shape,
-            "test_data_shape": self.test.shape,
-        })
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        mlflow.autolog(disable=True)
+        mlflow.set_experiment("bechdel_predictor_training")
+        with mlflow.start_run() as run:
+            logger.info(f"Logging info to mlflow run_id: {run.info.run_id}")
+            log_model(self.model)
+            mlflow.log_metrics({
+                "Threshold": self.model.threshold,
+                "AUC": self.auc,
+                "Average Precision": self.average_precision,
+                "Precision": self.precision,
+                "Recall": self.recall,
+            })
+            mlflow.log_params({
+                "features": self.model.features,
+                "target": self.model.target,
+                "train_data_shape": self.train.shape,
+                "test_data_shape": self.test.shape,
+            })
         self.next(self.end)
 
     @step

@@ -20,3 +20,11 @@ Finally, you can browse the logs by running
 ```sql
 select * from model_logs;
 ```
+
+Exit the psql shell by running `\q`, and then exit the docker container with `exit`.
+
+Finally, stop and remove the PSQL container by running:
+```shell
+docker stop 'past-container-id'
+docker remove 'past-container-id'
+```

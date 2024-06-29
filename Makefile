@@ -15,4 +15,7 @@ init-infra:
 	docker compose up --build
 
 train-model:
-	docker compose run --no-deps --entrypoint "python train_model.py run" python-tasks
+	docker compose run --build --no-deps --entrypoint "python scripts/train_model.py run" python-tasks
+
+cleanup-mlflow:
+	docker compose run --build --no-deps --entrypoint "python scripts/cleanup_mlflow.py run" python-tasks
