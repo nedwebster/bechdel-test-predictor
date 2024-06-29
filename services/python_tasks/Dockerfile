@@ -18,7 +18,7 @@ RUN poetry install
 # copy environment variables and config to the image
 COPY kaggle.json /app/
 
-COPY services/python_tasks/train_model.py services/python_tasks/init_data.py /app/
+COPY services/python_tasks/scripts /app/scripts
 
 ENV ENV=DOCKER
 
