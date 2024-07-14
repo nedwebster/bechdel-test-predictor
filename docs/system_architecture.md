@@ -14,20 +14,19 @@ The basic process flow for the deployment is as follows:
 
 ```mermaid
 flowchart LR
-    deploy_postgreSQL_database --> deploy_mlflow_server
-    deploy_mlflow_server --> run_init_data_task
-    run_init_data_task --> deploy_flask_app
-    deploy_flask_app --> D1{Is model available?}
-    D1 -->|No|retry
-    retry --> deploy_flask_app
-    D1 --> |Yes| flask_url_available
+    postgres-db --> mlflow-server
+    mlflow-server --> init-data
+    init-data --> cleanup-mlflow
+    cleanup-mlflow --> train-model
+    train-model --> bechdel-flask-app
 ```
 
 1. The psql database is deployed.
-2. The mlflow server is deployed, using the psql database for it's artifact storage.
-2. The `init_data.py` script is ran as a single task. This downloads the training data using [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master) and ingests it into the PSQL database as the `movies` table.
-3. The flask service is deployed, which first attempts to load a model from the mlflow model registry. If no model is found, it waits 10 seconds and retries. This retry loop happens indefinitely. If a model is found, it loads the model into memory and deploys the flask app.
-4. The user can now interact with the flask app via the web interface, and generate bechdel test predictions for their chosen movie titles!
+2. The mlflow server is deployed, using the psql database for it's artifact storage. You can browse the mlflow server with the mlflow ui by going to `http://localhost:5001`.
+3. The `services/python_tasks/init_data.py` script is ran as a single task. This script contains a Metaflow flow, which downloads the training data using [opendatasets](https://github.com/JovianHQ/opendatasets/tree/master) and ingests it into the PSQL database as the `movies` table.
+4. The `services/python_tasks/cleanup_mlflow.py` script is ran as a single task. This script contains a Metaflow flow which deletes the models and the experiments from mlflow, and then runs the mlflow garbage collection call. This ensures all mlflow metadata is also cleared.
+5. The `services/python_tasks/train_model.py` script is ran as a single task. This script contains a Metaflow flow which loads the data from the `movies` table in the database, trains the model, and logs it to the mlflow model registry. This task is logged as an mlflow experiment, and some params, metrics, and artifacts are logged.
+6. The flask app is deployed, which loads the trained model from the mlflow model registry, and provides a front end service that the user can interact with. You can interactve with the app by going to `http://localhost:5000`.
 
 
 ## Inference Process Flow
