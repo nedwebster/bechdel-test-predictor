@@ -11,11 +11,5 @@ lint:
 	black --check $(SOURCES_FOLDER)
 	isort --check-only $(SOURCES_FOLDER)
 
-init-infra:
+deploy-service:
 	docker compose up --build
-
-train-model:
-	docker compose run --build --no-deps --entrypoint "python scripts/train_model.py run" python-tasks
-
-cleanup-mlflow:
-	docker compose run --build --no-deps --entrypoint "python scripts/cleanup_mlflow.py run" python-tasks

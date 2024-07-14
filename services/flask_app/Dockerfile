@@ -15,9 +15,6 @@ COPY README.md /app/
 RUN poetry config virtualenvs.create false --local
 RUN poetry install
 
-# copy environment variables to the image
-COPY .env /app/
-
 # copy every content from the local file to the image
 COPY ./services/flask_app /app
 
