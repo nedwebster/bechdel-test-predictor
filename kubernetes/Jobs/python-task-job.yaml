@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+   name: bechdel-python-tasks
+spec:
+   template:
+      metadata:
+         labels:
+            app: bechdel-python-tasks
+      spec:
+         containers:
+            - name: bechdel-python-tasks
+              image: nedwebster/bechdel_python_tasks
+              imagePullPolicy: Always
+              command: ["python", "scripts/train_model.py", "run"]
+              env:
+              - name: "USERNAME"
+                value: "ned.webster"
+              - name: "DB_CONNECTION_STRING"
+                value: "postgresql://ned_webster:neds_password@postgres.default:5432/neds_psql_db"
+         restartPolicy: Never
+   backoffLimit: 4

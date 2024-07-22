@@ -27,6 +27,17 @@ This will deploy/run the following services:
 
 You can access the deployed app by going to `http://localhost:5000`, and you can check the mlflow server by going to `http://localhost:5001`. For more details, check out the [system_architecture](https://github.com/nedwebster/bechdel-test-predictor/blob/main/docs/system_architecture.md) docs.
 
+## Local Deployment - Kubernetes
+The model can also be deployed through kubernetes. This requires a running Kubernetes cluster. For local development, [Minikube](https://minikube.sigs.k8s.io/) is a good option, go to their docs and follow their setup guide. Kubernetes deployment also requires the environment variables listed below to be set. To deploy the app to kubernetes, make sure you have a Kubernetes cluster running on your machine, and then run the following make command:
+```sh
+make deploy-service-kubernetes
+```
+
+Once deployed, you can view the app by forwarding the exposed port to a port on your local host. To do this, run:
+```sh
+kubectl port-forward <name-of-flask-pod> 5000:5000
+```
+
 
 ## Environment Variables
 - `TMDB_API_TOKEN`: In order to access TheMovieDB api, the `TMDB_API_TOKEN` env var needs to be set. To generate your own token, you can follow the steps in this guide: https://www.educative.io/courses/movie-database-api-python/set-up-the-credentials. The `TMDB_API_TOKEN` is the `API Read Access Token` assigned to your TheMovieDB account.

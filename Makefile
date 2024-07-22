@@ -13,3 +13,9 @@ lint:
 
 deploy-service:
 	docker compose up --build
+
+deploy-service-kubernetes:
+	kubectl apply -f kubernetes/. --recursive
+
+delete-service-kubernetes:
+	kubectl delete -f kubernetes/. --recursive

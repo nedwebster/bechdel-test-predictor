@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: mlflow-server
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: mlflow-server
+   template:
+      metadata:
+         labels:
+            app: mlflow-server
+      spec:
+         containers:
+            - name: mlflow-server
+              image: nedwebster/mlflow_server
+              imagePullPolicy: IfNotPresent
+              env:
+               - name: "DB_CONNECTION_STRING"
+                 value: "postgresql://ned_webster:neds_password@postgres.default:5432/neds_psql_db"
+              ports:
+                  - containerPort: 5001
