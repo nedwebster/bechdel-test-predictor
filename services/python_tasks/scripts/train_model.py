@@ -1,11 +1,12 @@
 import logging
 
-from metaflow import FlowSpec, step
+from metaflow import FlowSpec, step, trigger_on_finish
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@trigger_on_finish("CleanupMlflowFlow")
 class TrainingFlow(FlowSpec):
     @step
     def start(self):
