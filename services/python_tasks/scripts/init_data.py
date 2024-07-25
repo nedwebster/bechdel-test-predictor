@@ -1,14 +1,13 @@
 import logging
 
-from metaflow.decorators import step
-from metaflow.flowspec import FlowSpec
+from metaflow import FlowSpec, step
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class InitData(FlowSpec):
+class InitDataFlow(FlowSpec):
     @step
     def start(self):
         logger.info("Starting init data flow")
@@ -41,4 +40,4 @@ class InitData(FlowSpec):
 
 
 if __name__ == "__main__":
-    InitData()
+    InitDataFlow()

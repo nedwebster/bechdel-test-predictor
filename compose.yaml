@@ -9,16 +9,29 @@ services:
       - "5432:5432"
     volumes:
       - postgres_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   mlflow-server:
     build: ./services/mlflow_server
     image: mlflow_server
     ports:
       - "5001:5001"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5001/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  python-tasks:
+  init-data:
     build: 
       context: .
       dockerfile: ./services/python_tasks/Dockerfile
@@ -29,8 +42,55 @@ services:
     environment:
       DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
       USERNAME: ${USERNAME}
+      KAGGLE_USERNAME: ${KAGGLE_USERNAME}
+      KAGGLE_KEY: ${KAGGLE_KEY}
     depends_on:
-      - mlflow-server
+      postgres-db:
+        condition: service_healthy
+      mlflow-server:
+        condition: service_healthy
+  
+  cleanup-mlflow:
+    build: 
+      context: .
+      dockerfile: ./services/python_tasks/Dockerfile
+    image: python_tasks
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: "scripts/cleanup_mlflow.py run"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      USERNAME: ${USERNAME}
+      KAGGLE_USERNAME: ${KAGGLE_USERNAME}
+      KAGGLE_KEY: ${KAGGLE_KEY}
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      mlflow-server:
+        condition: service_healthy
+      init-data:
+        condition: service_completed_successfully
+  
+  train-model:
+    build: 
+      context: .
+      dockerfile: ./services/python_tasks/Dockerfile
+    image: python_tasks
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: "scripts/train_model.py run"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      USERNAME: ${USERNAME}
+      KAGGLE_USERNAME: ${KAGGLE_USERNAME}
+      KAGGLE_KEY: ${KAGGLE_KEY}
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      mlflow-server:
+        condition: service_healthy
+      cleanup-mlflow:
+        condition: service_completed_successfully
 
   bechdel-flask-app:
     build:
@@ -38,9 +98,16 @@ services:
       dockerfile: ./services/flask_app/Dockerfile
     ports:
       - "5000:5000"
+    environment:
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      TMDB_API_TOKEN: ${TMDB_API_TOKEN}
     depends_on:
-      - mlflow-server
-      - python-tasks
+      postgres-db:
+        condition: service_healthy
+      mlflow-server:
+        condition: service_healthy
+      train-model:
+        condition: service_completed_successfully
 
 volumes:
   postgres_db:

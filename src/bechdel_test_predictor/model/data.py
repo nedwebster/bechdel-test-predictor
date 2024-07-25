@@ -1,5 +1,7 @@
+import json
 import os
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Tuple
 
@@ -12,19 +14,32 @@ from sqlalchemy import create_engine
 from bechdel_test_predictor.model.settings import DATA_URL, QUERY, RANDOM_SEED, TARGET, TEST_SIZE
 
 
-def download_csv_data(data_url) -> pd.DataFrame:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        od.download(dataset_id_or_url=data_url, data_dir=temp_dir)
-        data_path = Path(temp_dir) / "female-representation-in-cinema" / "movies.csv"
-        df = pd.read_csv(data_path, index_col=0)
+@contextmanager
+def kaggle_json_manager():
+    """Create a temporary kaggle.json file with kaggle credentials. This file is used for downloading data."""
+    with open("kaggle.json", "w") as file:
+        json.dump(
+            {
+                "username": os.environ["KAGGLE_USERNAME"],
+                "key": os.environ["KAGGLE_KEY"],
+            },
+            file,
+        )
+    yield
+    os.remove("kaggle.json")
 
-        return df
+
+def download_csv_data(data_url) -> pd.DataFrame:
+    with kaggle_json_manager():
+        with tempfile.TemporaryDirectory() as temp_dir:
+            od.download(dataset_id_or_url=data_url, data_dir=temp_dir)
+            data_path = Path(temp_dir) / "female-representation-in-cinema" / "movies.csv"
+            df = pd.read_csv(data_path, index_col=0)
+    return df
 
 
 def load_sql_data(query) -> pd.DataFrame:
-    engine = create_engine(
-        "postgresql://postgres:postgres123@postgres-db:5432/postgres"
-    )  # TODO: remove hardcoded values
+    engine = create_engine(os.environ["DB_CONNECTION_STRING"])
     with engine.connect() as connection:
         data = pd.read_sql(query, connection)
     return data

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-secret
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: neds_psql_db
+  POSTGRES_USER: ned_webster
+  POSTGRES_PASSWORD: neds_password

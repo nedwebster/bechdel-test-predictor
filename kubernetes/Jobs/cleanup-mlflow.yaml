@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+   name: cleanup-mlflow
+spec:
+   template:
+      metadata:
+         labels:
+            app: cleanup-mlflow
+      spec:
+         containers:
+            - name: cleanup-mlflow
+              image: nedwebster/bechdel_python_tasks
+              imagePullPolicy: Always
+              command: ["python", "scripts/cleanup_mlflow.py", "run"]
+              env:
+              - name: "USERNAME"
+                value: "ned.webster"
+              - name: "DB_CONNECTION_STRING"
+                value: "postgresql://ned_webster:neds_password@postgres.default:5432/neds_psql_db"
+         restartPolicy: Never
+   backoffLimit: 4
