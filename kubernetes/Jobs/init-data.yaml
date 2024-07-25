@@ -18,6 +18,16 @@ spec:
                 value: "ned.webster"
               - name: "DB_CONNECTION_STRING"
                 value: "postgresql://ned_webster:neds_password@postgres:5432/neds_psql_db"
+              - name: KAGGLE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                     name: kaggle-credentials
+                     key: kaggle-username
+              - name: KAGGLE_KEY
+                valueFrom:
+                  secretKeyRef:
+                     name: kaggle-credentials
+                     key: kaggle-key
          restartPolicy: Never
          imagePullSecrets:
             - name: regcred
