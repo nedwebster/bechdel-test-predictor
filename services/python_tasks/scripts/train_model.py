@@ -1,8 +1,6 @@
 import logging
 
-from metaflow.decorators import step
-from metaflow.flowspec import FlowSpec
-
+from metaflow import FlowSpec, step
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

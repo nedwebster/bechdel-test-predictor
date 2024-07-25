@@ -28,3 +28,4 @@ spec:
         - name: postgresdata
           persistentVolumeClaim:
             claimName: postgres-volume-claim
+      args: ["-c", "max_connections=200"]

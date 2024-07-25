@@ -15,9 +15,6 @@ COPY README.md /app/
 RUN poetry config virtualenvs.create false --local
 RUN poetry install
 
-# copy environment variables and config to the image
-COPY kaggle.json /app/
-
 COPY services/python_tasks/scripts /app/scripts
 
 ENV ENV=DOCKER

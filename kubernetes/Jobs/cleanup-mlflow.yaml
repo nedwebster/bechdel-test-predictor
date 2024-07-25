@@ -1,18 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-   name: bechdel-python-tasks
+   name: cleanup-mlflow
 spec:
    template:
       metadata:
          labels:
-            app: bechdel-python-tasks
+            app: cleanup-mlflow
       spec:
          containers:
-            - name: bechdel-python-tasks
+            - name: cleanup-mlflow
               image: nedwebster/bechdel_python_tasks
               imagePullPolicy: Always
-              command: ["python", "scripts/train_model.py", "run"]
+              command: ["python", "scripts/cleanup_mlflow.py", "run"]
               env:
               - name: "USERNAME"
                 value: "ned.webster"
