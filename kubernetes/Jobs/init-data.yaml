@@ -1,15 +1,15 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-   name: train-model
+   name: init-data
 spec:
    template:
       metadata:
          labels:
-            app: train-model
+            app: init-data
       spec:
          containers:
-            - name: train-model
+            - name: init-data
               image: nedwebster/bechdel_python_tasks
               imagePullPolicy: Always
               command: ["python", "scripts/init_data.py", "run"]
@@ -17,6 +17,8 @@ spec:
               - name: "USERNAME"
                 value: "ned.webster"
               - name: "DB_CONNECTION_STRING"
-                value: "postgresql://ned_webster:neds_password@postgres.default:5432/neds_psql_db"
+                value: "postgresql://ned_webster:neds_password@postgres:5432/neds_psql_db"
          restartPolicy: Never
+         imagePullSecrets:
+            - name: regcred
    backoffLimit: 4
