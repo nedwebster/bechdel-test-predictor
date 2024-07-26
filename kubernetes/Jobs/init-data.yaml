@@ -22,12 +22,12 @@ spec:
                 valueFrom:
                   secretKeyRef:
                      name: kaggle-credentials
-                     key: kaggle-username
+                     key: KAGGLE_USERNAME
               - name: KAGGLE_KEY
                 valueFrom:
                   secretKeyRef:
                      name: kaggle-credentials
-                     key: kaggle-key
+                     key: KAGGLE_KEY
          restartPolicy: Never
          imagePullSecrets:
             - name: regcred
