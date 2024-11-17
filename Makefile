@@ -4,15 +4,16 @@ download-data:
 	python analysis/download_data.py
 
 unit-test:
-	pytest tests/.
+	uv run pytest tests/.
 
 lint:
-	pflake8 $(SOURCES_FOLDER)
-	black --check $(SOURCES_FOLDER)
-	isort --check-only $(SOURCES_FOLDER)
+	uv run ruff check $(SOURCES_FOLDER)
 
 deploy-service:
 	docker compose up --build
+
+build-and-push:
+	sh scripts/build_and_push_images.sh
 
 deploy-service-kubernetes:
 	kubectl apply -f kubernetes/. --recursive -n bechdel-test-predictor

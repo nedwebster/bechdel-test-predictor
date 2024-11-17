@@ -1,22 +1,22 @@
-FROM python:3.10
-
-RUN pip install poetry==1.6.1
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /app
 
 # copy the poetry.lock and pyproject.toml file to the image
-COPY poetry.lock pyproject.toml /app/
+COPY uv.lock pyproject.toml /app/
+
+# install dependencies without package
+RUN uv sync --frozen --no-install-project --no-dev
 
 # copy the app source code, and README.md for the poetry install command
 COPY src/ /app/src/
 COPY README.md /app/
 
-# install the dependencies and packages in the requirements file
-RUN poetry config virtualenvs.create false --local
-RUN poetry install
+# install package seperately for performance (according to UV)
+RUN uv sync --frozen --no-dev
 
 COPY services/python_tasks/scripts /app/scripts
 
 ENV ENV=DOCKER
 
-ENTRYPOINT ["python"]
+ENTRYPOINT ["uv", "run", "python"]
