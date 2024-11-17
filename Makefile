@@ -15,7 +15,7 @@ deploy-service:
 	docker compose up --build
 
 deploy-service-kubernetes:
-	kubectl apply -f kubernetes/. --recursive
+	kubectl apply -f kubernetes/. --recursive -n bechdel-test-predictor
 
 delete-service-kubernetes:
-	kubectl delete -f kubernetes/. --recursive
+	kubectl delete -f kubernetes/. --recursive -n bechdel-test-predictor

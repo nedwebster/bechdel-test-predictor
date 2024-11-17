@@ -17,6 +17,8 @@ spec:
               - name: "USERNAME"
                 value: "ned.webster"
               - name: "DB_CONNECTION_STRING"
-                value: "postgresql://ned_webster:neds_password@postgres.default:5432/neds_psql_db"
+                value: "postgresql://ned_webster:neds_password@postgres:5432/neds_psql_db"
          restartPolicy: Never
+         imagePullSecrets:
+            - name: regcred
    backoffLimit: 4
